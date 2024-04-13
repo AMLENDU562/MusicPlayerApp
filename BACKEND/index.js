@@ -6,11 +6,13 @@ var imgSchema = require('./model');
 var fs = require('fs');
 var path = require('path');
 app.set("view engine", "ejs");
+require('dotenv').config()
+
 const cors=require('cors')
 
 app.use(cors())
 
-mongoose.connect("mongodb://localhost:27017/Songs")
+mongoose.connect(process.env.MONGO_URL)
 .then(console.log("DB Connected"))
 
 app.use(bodyParser.urlencoded({ extended: false }))
