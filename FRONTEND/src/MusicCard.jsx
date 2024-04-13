@@ -1,6 +1,4 @@
 import React from "react"
-
-
 function MusicCard(props)
 {
 
@@ -10,9 +8,10 @@ function MusicCard(props)
     }
     
     return (
-        <li className="flex flex-left" >
+        <li className="flex flex-left   cursor-pointer" onClick={handleClick} >
         <img className=" w-32 flex flex-left p-5" src={props.img} />
-        <h1 class="text-2xl text-center text-orange-300 font-sans cursor-pointer  hover:underline" onClick={handleClick} >{props.title}</h1>
+        <p className=" text-2xl  m-3 text-[#cfac4b] no-underline hover:underline  cursor-pointer">{props.name}</p>
+    
       
         </li>
     );

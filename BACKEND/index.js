@@ -2,10 +2,13 @@ var express = require('express')
 var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose')
-var imgSchema = require('./model.js');
+var imgSchema = require('./model');
 var fs = require('fs');
 var path = require('path');
 app.set("view engine", "ejs");
+const cors=require('cors')
+
+app.use(cors())
 
 mongoose.connect("mongodb://localhost:27017/Songs")
 .then(console.log("DB Connected"))
@@ -17,36 +20,65 @@ var multer = require('multer');
 
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, 'uploads')
+	if(file.fieldname=='image')
+	cb(null, '../FrontEnd/src/images/')
+	
+	if(file.fieldname=='audio')
+	cb(null, '../FrontEnd/src/audios/')
+
 	},
 	filename: (req, file, cb) => {
-		cb(null, file.fieldname + '-' + Date.now())
+		cb(null, file.originalname)
 	}
 });
 
 var upload = multer({ storage: storage });
 
+
+
+app.post('/',async(req,res)=>{
+    console.log(req.body);
+})
+
 app.get('/', (req, res) => {
+	res.send('<h1>WELCOME SIR</h1>')
 	imgSchema.find({})
 	.then((data, err)=>{
 		if(err){
 			console.log(err);
 		}
-		res.render('imagepage',{items: data})
+
+		else{
+			console.log("Redirect");
+		}
 	})
 });
 
+app.get('/get-image',(req,res)=>{
+	imgSchema.find({}).then(data=>{
+		res.send(data);
+	});
+})
 
-app.post('/', upload.single('image'), (req, res, next) => {
+
+
+app.post('/upload',upload.fields([{name: 'image', maxCount: 1},{name: 'audio', maxCount: 1},]), (req, res, next) => {
+	console.log(req.files.image[0].filename);
+	console.log(req.files.audio[0].filename);
 
 	var obj = {
-		name: req.body.name,
-		desc: req.body.desc,
+
+		name:req.body.name,
 		img: {
-			data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.img)),
-			contentType: 'image/png'
+			data: req.files.image[0].filename,
+			contentType: 'image'
+		},
+		aud:{
+			data:req.files.audio[0].filename,
+			contentType:'audio'
 		}
 	}
+
 	imgSchema.create(obj)
 	.then ((err, item) => {
 		if (err) {
@@ -57,6 +89,9 @@ app.post('/', upload.single('image'), (req, res, next) => {
 			res.redirect('/');
 		}
 	});
+	res.json({
+		status:"ok"
+	})
 });
 
 var port = process.env.PORT || '3000'
