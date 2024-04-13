@@ -96,7 +96,7 @@ app.post('/upload',upload.fields([{name: 'image', maxCount: 1},{name: 'audio', m
 	})
 });
 
-var port = process.env.PORT || '3000'
+var port = process.env.PORT
 app.listen(port, err => {
 	if (err)
 		throw err
