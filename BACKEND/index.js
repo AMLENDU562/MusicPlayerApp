@@ -13,7 +13,8 @@ const cors=require('cors')
 app.use(cors())
 
 mongoose.connect(process.env.MONGO_URL)
-.then(console.log("DB Connected"))
+.then(()=>console.log('connected'))
+.catch(e=>console.log(e));
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
