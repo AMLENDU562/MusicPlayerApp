@@ -64,7 +64,7 @@ app.get('/get-image',(req,res)=>{
 })
 
 app.get('/upload',(req,res)=>{
-	res.send(<h1>Uploaded file</h1>);
+	res.send("<h1>Uploaded file</h1>");
 })
 
 app.post('/upload',upload.fields([{name: 'image', maxCount: 1},{name: 'audio', maxCount: 1},]), (req, res, next) => {
