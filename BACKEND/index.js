@@ -12,10 +12,7 @@ const cors=require('cors')
 
 app.use(cors())
 
-mongoose.connect(
-  process.env.MONGO_URL,
-  options
-)
+mongoose.connect(process.env.MONGO_URL)
 .then(()=>console.log('connected'))
 .catch(e=>console.log(e));
 
