@@ -24,10 +24,10 @@ var multer = require('multer');
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 	if(file.fieldname=='image')
-	cb(null, '../FrontEnd/src/images/')
+	cb(null, 'C:\Users\amlen\OneDrive\Desktop\MusicPlayerApp\FRONTEND\src\images/')
 	
 	if(file.fieldname=='audio')
-	cb(null, '../FrontEnd/src/audios/')
+	cb(null, 'C:\Users\amlen\OneDrive\Desktop\MusicPlayerApp\FRONTEND\src\audios/')
 
 	},
 	filename: (req, file, cb) => {
