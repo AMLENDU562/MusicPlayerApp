@@ -67,37 +67,33 @@ app.get('/upload',(req,res)=>{
 	res.send("<h1>Uploaded file</h1>");
 })
 
-app.post('/upload',upload.fields([{name: 'image', maxCount: 1},{name: 'audio', maxCount: 1},]), (req, res, next) => {
-	console.log(req.files.image[0].filename);
-	console.log(req.files.audio[0].filename);
+app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), (req, res, next) => {
+    console.log(req.files.image[0].filename);
+    console.log(req.files.audio[0].filename);
 
-	var obj = {
+    var obj = {
+        name: req.body.name,
+        img: {
+            data: req.files.image[0].filename,
+            contentType: 'image'
+        },
+        aud: {
+            data: req.files.audio[0].filename,
+            contentType: 'audio'
+        }
+    }
 
-		name:req.body.name,
-		img: {
-			data: req.files.image[0].filename,
-			contentType: 'image'
-		},
-		aud:{
-			data:req.files.audio[0].filename,
-			contentType:'audio'
-		}
-	}
-
-	imgSchema.create(obj)
-	.then ((err, item) => {
-		if (err) {
-			console.log(err);
-		}
-		else {
-			// item.save();
-			res.redirect('/');
-		}
-	});
-	res.json({
-		status:"ok"
-	})
+    imgSchema.create(obj)
+        .then((item) => { // Removed 'err' from parameters
+            // Item successfully created
+            res.json({ status: "ok" }); // Sending JSON response
+        })
+        .catch((err) => { // Handling errors
+            console.log(err);
+            res.status(500).json({ error: "Internal Server Error" }); // Sending error response
+        });
 });
+
 
 var port = process.env.PORT
 app.listen(port, err => {
