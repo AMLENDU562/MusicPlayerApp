@@ -67,7 +67,7 @@ app.get('/upload',(req,res)=>{
 	res.send("<h1>Uploaded file</h1>");
 })
 
-app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), (req, res, next) => {
+app.post('https://musicplayerapp-okb4.onrender.com/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), (req, res, next) => {
     console.log(req.files.image[0].filename);
     console.log(req.files.audio[0].filename);
 
