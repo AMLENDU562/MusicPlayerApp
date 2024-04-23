@@ -23,11 +23,11 @@ var multer = require('multer');
 
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-	if(file.fieldname=='image')
+	
 	cb(null, '../FrontEnd/src/images/')
 	
-	if(file.fieldname=='audio')
-	cb(null, '../FrontEnd/src/audios/')
+	
+	
 
 	},
 	filename: (req, file, cb) => {
@@ -69,12 +69,10 @@ app.get('/upload',(req,res)=>{
 
 app.post('/upload', upload.fields([{ name: 'image', maxCount: 8 }, { name: 'audio', maxCount: 8 }]), (req, res, next) => {
     // Check if required fields are present
-    if (!req.body.name || !req.files.image || !req.files.audio) {
-        return res.status(400).json({ error: "Missing required fields" });
-    }
+   
 
-    console.log(req.files.image[0].filename);
-    console.log(req.files.audio[0].filename);
+    console.log(req.files);
+	console.log(req.body.name);
 
     var obj = {
         name: req.body.name,
@@ -83,20 +81,20 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 8 }, { name: 'audi
             contentType: 'image'
         },
         aud: {
-            data: req.files.audio[0].filename,
+            data: req.files.image[0].filename,
             contentType: 'audio'
         }
     }
 
-    imgSchema.create(obj)
-        .then((item) => {
-            // Item successfully created
-            return res.status(200).json({ success: true, message: "Upload successful" });
-        })
-        .catch((err) => {
-            // Handling errors
-            return res.status(500).json({ error: "Internal Server Problem" });
-        });
+    // imgSchema.create(obj)
+    //     .then((item) => {
+    //         // Item successfully created
+    //         return res.status(200).json({ success: true, message: "Upload successful" });
+    //     })
+    //     .catch((err) => {
+    //         // Handling errors
+    //         return res.status(500).json({ error: "Internal Server Problem" });
+    //     });
 });
 
 var port = process.env.PORT
