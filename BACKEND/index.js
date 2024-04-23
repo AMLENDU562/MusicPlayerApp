@@ -20,20 +20,22 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 var multer = require('multer');
-
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-	
-	cb(null, '../FrontEnd/src/images/')
-	
-	
-	
-
+		if (file.fieldname === 'image') {
+			cb(null, '../FrontEnd/src/images/');
+		} else if (file.fieldname === 'audio') {
+			cb(null, '../FrontEnd/src/audios/');
+		} else {
+			cb(new Error('Invalid fieldname'));
+		}
 	},
 	filename: (req, file, cb) => {
-		cb(null, file.originalname)
+		// You can modify filename dynamically here if needed
+		cb(null, file.originalname);
 	}
 });
+
 
 var upload = multer({ storage: storage });
 
@@ -67,12 +69,16 @@ app.get('/upload',(req,res)=>{
 	res.send("<h1>Uploaded file</h1>");
 })
 
-app.post('/upload', upload.fields([{ name: 'image', maxCount: 8 }, { name: 'audio', maxCount: 8 }]), (req, res, next) => {
+var uploadMiddleware = upload.fields([{ name: 'image', maxCount: 100 }, { name: 'audio', maxCount: 100 }]);
+
+
+app.post('/upload', uploadMiddleware, (req, res) => {
     // Check if required fields are present
    
 
     console.log(req.files);
 	console.log(req.body.name);
+	console.log(req.body);
 
     var obj = {
         name: req.body.name,
@@ -81,7 +87,7 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 8 }, { name: 'audi
             contentType: 'image'
         },
         aud: {
-            data: req.files.image[0].filename,
+            data: req.files.audio[0].filename,
             contentType: 'audio'
         }
     }
