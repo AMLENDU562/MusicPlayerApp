@@ -21,21 +21,21 @@ app.use(bodyParser.json())
 
 var multer = require('multer');
 
-// var storage = multer.diskStorage({
-// 	destination: (req, file, cb) => {
-// 	if(file.fieldname=='image')
-// 	cb(null, '../FrontEnd/src/images/')
+var storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+	if(file.fieldname=='image')
+	cb(null, '../FrontEnd/src/images/')
 	
-// 	if(file.fieldname=='audio')
-// 	cb(null, '../FrontEnd/src/audios/')
+	if(file.fieldname=='audio')
+	cb(null, '../FrontEnd/src/audios/')
 
-// 	},
-// 	filename: (req, file, cb) => {
-// 		cb(null, file.originalname)
-// 	}
-// });
+	},
+	filename: (req, file, cb) => {
+		cb(null, file.originalname)
+	}
+});
 
-// var upload = multer({ storage: storage });
+var upload = multer({ storage: storage });
 
 
 
@@ -67,7 +67,7 @@ app.get('/upload',(req,res)=>{
 	res.send("<h1>Uploaded file</h1>");
 })
 
-app.post('/upload',  (req, res, next) => {
+app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), (req, res, next) => {
     console.log(req.files.image[0].filename);
     console.log(req.files.audio[0].filename);
 
@@ -86,7 +86,7 @@ app.post('/upload',  (req, res, next) => {
     imgSchema.create(obj)
         .then((item) => { // Removed 'err' from parameters
             // Item successfully created
-            res.status(200).json({success: "Successful"}); // Sending error response
+            res.status(200).json({error: "Successful"}); // Sending error response
         })
         .catch((err) => { // Handling errors
             console.log(err);
