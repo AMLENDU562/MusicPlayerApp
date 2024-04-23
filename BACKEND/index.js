@@ -91,12 +91,11 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audi
     imgSchema.create(obj)
         .then((item) => {
             // Item successfully created
-            res.status(200).json({ success: true, message: "Upload successful" });
+            return res.status(200).json({ success: true, message: "Upload successful" });
         })
         .catch((err) => {
             // Handling errors
-            console.log(err);
-            res.status(500).json({ error: "Internal Server Problem" });
+            return res.status(500).json({ error: "Internal Server Problem" });
         });
 });
 
