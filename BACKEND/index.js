@@ -67,7 +67,7 @@ app.get('/upload',(req,res)=>{
 	res.send("<h1>Uploaded file</h1>");
 })
 
-app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), (req, res, next) => {
+app.post('/upload', upload.fields([{ name: 'image', maxCount: 8 }, { name: 'audio', maxCount: 8 }]), (req, res, next) => {
     // Check if required fields are present
     if (!req.body.name || !req.files.image || !req.files.audio) {
         return res.status(400).json({ error: "Missing required fields" });
