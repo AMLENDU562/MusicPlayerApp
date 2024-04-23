@@ -68,6 +68,11 @@ app.get('/upload',(req,res)=>{
 })
 
 app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), (req, res, next) => {
+    // Check if required fields are present
+    if (!req.body.name || !req.files.image || !req.files.audio) {
+        return res.status(400).json({ error: "Missing required fields" });
+    }
+
     console.log(req.files.image[0].filename);
     console.log(req.files.audio[0].filename);
 
@@ -84,16 +89,16 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audi
     }
 
     imgSchema.create(obj)
-        .then((item) => { // Removed 'err' from parameters
+        .then((item) => {
             // Item successfully created
-            res.status(200).json({error: "Successful"}); // Sending error response
+            res.status(200).json({ success: true, message: "Upload successful" });
         })
-        .catch((err) => { // Handling errors
+        .catch((err) => {
+            // Handling errors
             console.log(err);
-            res.status(500).json({ error: "Internal Server Error" }); // Sending error response
+            res.status(500).json({ error: "Internal Server Problem" });
         });
 });
-
 
 var port = process.env.PORT
 app.listen(port, err => {
