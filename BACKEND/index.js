@@ -89,12 +89,12 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 8 }, { name: 'audi
     // imgSchema.create(obj)
     //     .then((item) => {
     //         // Item successfully created
-    //         return res.status(200).json({ success: true, message: "Upload successful" });
+            return res.status(200).json({ success: true, message: "Upload successful" });
     //     })
     //     .catch((err) => {
-    //         // Handling errors
-    //         return res.status(500).json({ error: "Internal Server Problem" });
-    //     });
+            // Handling errors
+            // return res.status(500).json({ error: "Internal Server Problem" });
+        // });
 });
 
 var port = process.env.PORT
